@@ -22,7 +22,7 @@ Before you begin, make sure you have the following installed on your machine:
 1. Clone the repository:
 
    ```
-   git clone https://github.com/awesome04/NextJS-Firebase-app.git
+   git clone https://github.com/kunalwadile-4442/admin-web.git
    ```
 
 2. Navigate to the project directory:
