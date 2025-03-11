@@ -17,31 +17,44 @@ export default function LoginPage() {
 
     const onSubmit = async (data) => {
         try {
-            const { error } = await signIn(data.email, data.password);
+            console.log("Attempting login with:", data);
+            const { error, user } = await signIn(data.email, data.password);
+    
             if (error) {
-                switch (error.code) {
-                    case 'auth/user-not-found':
-                        setError('email', { type: 'manual', message: 'User not found. Please sign up.' });
-                        break;
-                    case 'auth/email-already-in-use':
-                        setError('email', { type: 'manual', message: 'Email already exists. Try logging in.' });
-                        break;
-                    case 'auth/wrong-password':
-                        setError('password', { type: 'manual', message: 'Incorrect password.' });
-                        break;
-                    case 'auth/invalid-email':
-                        setError('email', { type: 'manual', message: 'Invalid email format.' });
-                        break;
-                    default:
-                        setError('root', { type: 'manual', message: 'Something went wrong. Try again.' });
+                console.error("Firebase Error:", error);
+    
+                if (error.code) {
+                    switch (error.code) {
+                        case 'auth/user-not-found':
+                            setError('email', { type: 'manual', message: 'User not found. Please sign up.' });
+                            break;
+                        case 'auth/wrong-password':
+                            setError('password', { type: 'manual', message: 'Incorrect password.' });
+                            break;
+                        case 'auth/invalid-email':
+                            setError('email', { type: 'manual', message: 'Invalid email format.' });
+                            break;
+                        case 'auth/too-many-requests':
+                            setError('root', { type: 'manual', message: 'Too many failed attempts. Try again later.' });
+                            break;
+                        default:
+                            setError('root', { type: 'manual', message: 'Login failed. Try again.' });
+                    }
+                } else {
+                    setError('root', { type: 'manual', message: 'An unexpected error occurred.' });
                 }
                 return;
             }
+    
+            console.log("Login Successful:", user);
             router.push('/admin');
         } catch (error) {
+            console.error("Unexpected Error:", error);
             setError('root', { type: 'manual', message: 'An unexpected error occurred.' });
         }
     };
+    
+    
 
     return (
         <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -81,13 +94,10 @@ export default function LoginPage() {
                         disabled={isSubmitting}
                         className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded transition-colors duration-300"
                     >
-                        {isSubmitting ? 'Signing In...' : 'Sign In'}
+                        {isSubmitting ? 'Login...' : 'LogIn'}
                     </button>
                 </form>
-                <p className="mt-4 text-center text-gray-600">
-                    Don't have an account?{' '}
-                    <Link href="/signup" className="text-indigo-600 font-bold">Sign Up</Link>
-                </p>
+              
             </div>
         </div>
     );

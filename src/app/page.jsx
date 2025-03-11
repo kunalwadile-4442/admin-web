@@ -1,6 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Navbar from "@/components/Navbar";
+import { motion } from "framer-motion";
 
 export default function Dashboard() {
     const router = useRouter();
@@ -21,8 +23,18 @@ export default function Dashboard() {
 
     return (
         <div className="p-5">
-            <h1>Welcome to Dashboard</h1>
-            {user && <p>Email: {user.email}</p>}
+           <Navbar/>
+           <div className="min-h-screen flex flex-col items-center px-6 pt-20 pb-12">
+              <motion.h1
+                className="text-4xl font-bold text-center mb-6"
+                initial={{ opacity: 0, y: -50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}  >Hello kunal</motion.h1>
+                </div>
         </div>
+
+          
+          
+      
     );
 }
